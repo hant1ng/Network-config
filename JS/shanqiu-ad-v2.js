@@ -15,21 +15,32 @@ for(let i in requestParams){
   params[paramKey] = paramValue;
 }
 //预设vip数据
-var temp = {"uuid":null,"banned":"0","headimgurl":null,"type":null,"wxunionid":null,"token":null,"vipto":null,"wxopenid":null,"nickname":null,"email":null,"appleid":null,"device":null};
-temp.email = "9527";
-temp.appleid = "9527";
-temp.wxopenid = "9527";
-temp.nickname = "南通男同男童";
-temp.token = params.token;
-temp.device = params.device;
-temp.uuid = params.uid;
+try {
+  // 1. 将服务器返回的字符串解析为 JSON 对象
+  let body = JSON.parse($response.body);
 
-if(requestUrl.match(infoApi)){
-  body.status = "1";
-  temp.type = "9"; //普通会员：0-7，无法绑定Apple ID | 年费会员：8 | 终身会员：9 | 普通会员：10+，可绑定Apple ID
-  temp.vipto = "2099-12-31 00:00:00";
-  body.data[0] = temp;
+  // 2. 安全检查：确保数据结构符合预期
+  if (body.data && Array.isArray(body.data) && body.data.length > 0) {
+    body.status = "1";
+
+    // 3. 局部修改：仅覆盖需要的字段，保留原有的 cid、token 等隐藏鉴权字段
+    body.data[0].type = "9"; // 终身会员
+    body.data[0].vipto = "2099-12-31 00:00:00";
+    body.data[0].nickname = "南通男同男童";
+    body.data[0].email = "9527";
+    body.data[0].appleid = "9527";
+    body.data[0].wxopenid = "9527";
+  }
+
+  // 4. 重新打包为字符串并返回给 App
+  $done({ body: JSON.stringify(body) });
+  
+} catch (e) {
+  // 发生错误时原样放行，避免 App 无法获取数据导致白屏或闪退
+  console.log("重写脚本解析失败: " + e);
+  $done({});
 }
+
 
 //if(requestUrl.match(resetApi)
 
