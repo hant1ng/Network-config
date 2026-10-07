@@ -7,7 +7,7 @@
 force-http-engine-hosts = %APPEND% 175.178.52.149:88, 108.181.40.58:88
 
 [Script]
-山丘阅读去开屏 = type=http-response,pattern=^https?://(ii\.815616\.xyz|108\.181\.40\.58:88|175\.178\.52\.149:88)/api/v2/config(2020|2025)/8,requires-body=true,max-size=65536,script-path=https://raw.githubusercontent.com/hant1ng/Network-config/main/JS/shanqiu.js,script-update-interval=0
+山丘阅读去开屏-v2 = type=http-response,pattern=^https?://(ii\.815616\.xyz|108\.181\.40\.58:88|175\.178\.52\.149:88)/api/v2/config2025/8,requires-body=true,max-size=65536,script-path=https://raw.githubusercontent.com/hant1ng/Network-config/main/JS/shanqiu-ad-v2.js,script-update-interval=60
 
 [URL Rewrite]
 ^https://a\.815616\.xyz/images/s_tipimage_[1-4]\.jpg - reject
