@@ -1,7 +1,16 @@
 try {
-  // 1. 获取请求 URL 和解析响应体
   var requestUrl = $request.url;
   var body = JSON.parse($response.body);
+  
+  // 1. 提取 URL 请求参数（解决 App 本地校验 device 和 token 为 null 的问题）
+  var params = {};
+  if (requestUrl.indexOf('?') !== -1) {
+    var queryArr = requestUrl.split('?')[1].split('&');
+    for (let i = 0; i < queryArr.length; i++) {
+      let pair = queryArr[i].split('=');
+      params[pair[0]] = pair[1];
+    }
+  }
   
   // 2. 路由分发
   if (requestUrl.indexOf('myinfo') !== -1) {
@@ -9,12 +18,19 @@ try {
     if (body.data && Array.isArray(body.data) && body.data.length > 0) {
       body.status = "1";
       let userData = body.data[0];
-      userData.type = "9"; // 终身会员
+      
+      // 核心会员修改
+      userData.type = "9"; // 9为终身会员
       userData.vipto = "2099-12-31 00:00:00";
       userData.nickname = "南通男同男童";
       userData.email = "9527";
       userData.appleid = "9527";
       userData.wxopenid = "9527";
+      
+      // 强制回填请求参数（极其关键，防止 App 验签失败）
+      if (params.token) userData.token = params.token;
+      if (params.device) userData.device = decodeURIComponent(params.device);
+      if (params.uid) userData.uuid = params.uid;
     }
     
   } else if (requestUrl.indexOf('addsecond') !== -1) {
@@ -23,10 +39,8 @@ try {
     body.data = "绑定成功";
     
   } else if (requestUrl.indexOf('config2025') !== -1) {
-    // --- 【修改云端配置 (全量去广告与自定义设置)】 ---
+    // --- 【修改云端配置 (全量去广告)】 ---
     if (body.data && Array.isArray(body.data)) {
-      
-      // 预设你需要修改的完整配置字典
       const configMap = {
         "ONLINE_REWARDAD_CONFIG": "0",
         "ONLINE_INTERAD_DOWNLOAD_CONFIG": "0",
@@ -49,7 +63,6 @@ try {
         "ONLINE_TXTNOVEL_URL": "http://www.txtnovel.vip"
       };
 
-      // 遍历服务端下发的数据，遇到字典里存在的键，自动替换对应的值
       for (let i = 0; i < body.data.length; i++) {
         let currentKey = body.data[i].cokey;
         if (configMap.hasOwnProperty(currentKey)) {
@@ -59,11 +72,10 @@ try {
     }
   }
 
-  // 3. 统一打包并返回
+  // 3. 统一打包返回
   $done({ body: JSON.stringify(body) });
 
 } catch (e) {
-  // 容错处理
   console.log("重写脚本执行错误: " + e);
   $done({});
 }
