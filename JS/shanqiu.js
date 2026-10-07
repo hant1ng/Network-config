@@ -1,9 +1,7 @@
 /**
  * 山丘阅读去开屏广告
- * 适配 Surge
- * 目标：
- * 1. 清空自营开屏内容 adconfig
- * 2. 关闭第三方开屏配置 PARAV2_SPLASHADS_CONFIG
+ * Surge 适配版
+ * 仅处理开屏相关配置
  */
 let obj;
 
@@ -21,7 +19,7 @@ try {
       }
 
       if (item.cokey === "PARAV2_SPLASHADS_CONFIG") {
-        item.covalue = "0";
+        item.covalue = "";
         modified++;
       }
     }
