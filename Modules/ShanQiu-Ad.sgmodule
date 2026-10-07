@@ -1,0 +1,16 @@
+#!name=山丘阅读去开屏广告
+#!desc=清空山丘阅读自营开屏内容，并关闭第三方开屏配置
+#!author=Hant
+#!system=ios
+
+[General]
+force-http-engine-hosts = %APPEND% 175.178.52.149:88, 108.181.40.58:88
+
+[Script]
+山丘阅读去开屏 = type=http-response,pattern=^https?://(ii\.815616\.xyz|108\.181\.40\.58:88|175\.178\.52\.149:88)/api/v2/config(2020|2025)/8,requires-body=true,max-size=65536,script-path=https://raw.githubusercontent.com/hant1ng/Network-config/main/JS/shanqiu.js,script-update-interval=0
+
+[URL Rewrite]
+^https://a\.815616\.xyz/images/s_tipimage_[1-4]\.jpg - reject
+
+[MITM]
+hostname = %APPEND% ii.815616.xyz, a.815616.xyz
