@@ -1,0 +1,11 @@
+#!name=Multi Sub Info Panel
+#!desc=Show up to 5 subscription usages in one Surge panel.
+#!category=Subscription
+#!arguments=name1:-,url1:-,name2:-,url2:-,name3:-,url3:-,name4:-,url4:-,name5:-,url5:-
+#!arguments-desc=name1/url1 ~ name5/url5\n  └ Fill only the subscriptions you use.\n  └ Subscription URLs are sensitive. Keep this module private.
+
+[Script]
+multi-sub-info = type=generic,script-path=https://raw.githubusercontent.com/hant1ng/Network-config/main/JS/multi-sub-info-panel.js,argument=name1={{{name1}}}|||url1={{{url1}}}|||name2={{{name2}}}|||url2={{{url2}}}|||name3={{{name3}}}|||url3={{{url3}}}|||name4={{{name4}}}|||url4={{{url4}}}|||name5={{{name5}}}|||url5={{{url5}}},timeout=15
+
+[Panel]
+MultiSubInfo = title="Subscription Info",content="Loading...",style=info,script-name=multi-sub-info,update-interval=3600
